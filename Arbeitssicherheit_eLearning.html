@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbeitssicherheit E-Learning – Kaminvertriebshaus</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy:   #1a2b4a;
+    --blue:   #2e5d9e;
+    --light:  #d6e4f7;
+    --accent: #e8531c;
+    --green:  #217346;
+    --red:    #c0392b;
+    --gray:   #f4f6fa;
+    --text:   #1c2230;
+    --muted:  #6b7a99;
+    --white:  #ffffff;
+    --gold:   #f0a500;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    background: linear-gradient(135deg, var(--navy) 0%, #263b60 60%, #1f3a5f 100%);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,.25);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo-icon {
+    width: 44px; height: 44px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .header-title { color: var(--white); }
+  .header-title h1 { font-family: 'Source Serif 4', serif; font-size: 18px; font-weight: 700; line-height: 1.2; }
+  .header-title p  { font-size: 11px; color: #9ab3d4; margin-top: 2px; }
+
+  .progress-wrap { flex: 1; max-width: 340px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: #9ab3d4; margin-bottom: 5px; }
+  .progress-bar { height: 6px; background: rgba(255,255,255,.15); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width .5s ease; }
+
+  /* ── LAYOUT ── */
+  .main-wrap { max-width: 1100px; margin: 0 auto; padding: 28px 20px; display: grid; grid-template-columns: 240px 1fr; gap: 24px; }
+
+  /* ── SIDEBAR ── */
+  .sidebar { position: sticky; top: 88px; height: fit-content; }
+  .sidebar-card {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.07);
+    overflow: hidden;
+  }
+  .sidebar-head {
+    background: var(--navy);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 12px 16px;
+  }
+  .chapter-btn {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; border: none; background: none;
+    padding: 11px 16px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12.5px;
+    color: var(--muted);
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+    transition: background .15s, color .15s;
+  }
+  .chapter-btn:hover { background: var(--light); color: var(--navy); }
+  .chapter-btn.active { background: var(--light); color: var(--navy); font-weight: 600; }
+  .chapter-btn.done { color: var(--green); }
+  .chapter-btn.done .ch-num { background: var(--green); }
+  .ch-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--blue);
+    color: var(--white);
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .chapter-btn.active .ch-num { background: var(--accent); }
+  .ch-check { margin-left: auto; font-size: 14px; }
+
+  /* ── CONTENT ── */
+  .content-area { min-width: 0; }
+
+  .module {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.07);
+    overflow: hidden;
+    display: none;
+  }
+  .module.active { display: block; }
+
+  .module-header {
+    background: linear-gradient(135deg, var(--navy), var(--blue));
+    padding: 28px 32px;
+    color: var(--white);
+  }
+  .module-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #9ab3d4;
+    margin-bottom: 8px;
+  }
+  .module-header h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .module-header p {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #b8cfe8;
+    line-height: 1.5;
+  }
+
+  .module-body { padding: 28px 32px; }
+
+  /* Info cards in modules */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+  .info-card {
+    background: var(--gray);
+    border-radius: 10px;
+    padding: 16px;
+    border-left: 4px solid var(--blue);
+  }
+  .info-card.warn { border-color: var(--accent); }
+  .info-card.danger { border-color: var(--red); }
+  .info-card.ok { border-color: var(--green); }
+  .info-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .info-card p, .info-card li { font-size: 12.5px; color: #444; line-height: 1.55; }
+  .info-card ul { padding-left: 16px; }
+
+  .law-badge {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 99px;
+    margin: 2px 2px 8px 0;
+  }
+
+  .highlight-box {
+    background: #fff8f0;
+    border: 1px solid #f5c99a;
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .highlight-box strong { color: var(--accent); }
+
+  .section-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 22px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--light);
+  }
+
+  /* ── QUIZ ── */
+  .quiz-module { }
+  .quiz-q { margin-bottom: 28px; }
+  .quiz-q .q-text {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--navy);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .quiz-q .q-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .answer-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--gray);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 11px 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    transition: all .18s;
+  }
+  .answer-btn:hover:not(:disabled) { background: var(--light); border-color: var(--blue); }
+  .answer-btn.selected { background: var(--light); border-color: var(--blue); }
+  .answer-btn.correct  { background: #e8f5e9; border-color: var(--green); color: var(--green); font-weight: 600; }
+  .answer-btn.wrong    { background: #fdecea; border-color: var(--red);   color: var(--red);   }
+  .answer-btn:disabled { cursor: default; }
+
+  .feedback-msg {
+    font-size: 12.5px;
+    border-radius: 7px;
+    padding: 8px 12px;
+    margin-top: 4px;
+    display: none;
+  }
+  .feedback-msg.ok   { background: #e8f5e9; color: var(--green); display: block; }
+  .feedback-msg.bad  { background: #fdecea; color: var(--red);   display: block; }
+
+  /* ── NAVIGATION ── */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 32px;
+    border-top: 1px solid #f0f0f0;
+    background: var(--white);
+  }
+  .btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all .18s;
+  }
+  .btn-primary { background: var(--navy); color: var(--white); }
+  .btn-primary:hover { background: var(--blue); }
+  .btn-accent { background: var(--accent); color: var(--white); }
+  .btn-accent:hover { filter: brightness(1.1); }
+  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid #dde3ee; }
+  .btn-ghost:hover { background: var(--light); color: var(--navy); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* ── RESULT SCREEN ── */
+  .result-screen { text-align: center; padding: 48px 32px; }
+  .result-icon { font-size: 64px; margin-bottom: 16px; }
+  .result-title { font-family: 'Source Serif 4', serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .score-circle {
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    background: conic-gradient(var(--green) var(--pct), #e0e0e0 0);
+    display: flex; align-items: center; justify-content: center;
+    margin: 20px auto;
+    position: relative;
+  }
+  .score-circle::before {
+    content: '';
+    width: 80px; height: 80px;
+    background: var(--white);
+    border-radius: 50%;
+    position: absolute;
+  }
+  .score-inner { position: relative; z-index: 1; font-size: 22px; font-weight: 700; color: var(--navy); }
+  .result-sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+  .cert-box {
+    background: linear-gradient(135deg, #f9f3e8, #fff8ed);
+    border: 2px solid var(--gold);
+    border-radius: 14px;
+    padding: 24px 32px;
+    max-width: 500px;
+    margin: 0 auto 24px;
+  }
+  .cert-box h3 { font-family: 'Source Serif 4', serif; font-size: 18px; color: var(--navy); margin-bottom: 6px; }
+  .cert-box p  { font-size: 12.5px; color: #666; line-height: 1.6; }
+
+  /* Responsive */
+  @media(max-width: 720px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .info-grid { grid-template-columns: 1fr; }
+    .module-header { padding: 20px; }
+    .module-body { padding: 20px; }
+    .nav-row { padding: 16px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-inner">
+    <div class="header-logo">
+      <div class="logo-icon">🔥</div>
+      <div class="header-title">
+        <h1>Arbeitssicherheit E-Learning</h1>
+        <p>Kaminvertriebshaus · Pflichtschulung nach ArbSchG §12 · ASiG §11</p>
+      </div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>Lernfortschritt</span>
+        <span id="pct-label">0 %</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-head">Kapitelübersicht</div>
+      <button class="chapter-btn active" onclick="goto(0)" id="cb0">
+        <span class="ch-num">1</span> Einführung &amp; Rechtliches <span class="ch-check" id="ck0"></span>
+      </button>
+      <button class="chapter-btn" onclick="goto(1)" id="cb1">
+        <span class="ch-num">2</span> Fluchtwege &amp; Notfall <span class="ch-check" id="ck1"></span>
+      </button>
+      <button class="chapter-btn" onclick="goto(2)" id="cb2">
+        <span class="ch-num">3</span> Bildschirmarbeit &amp; Ergonomie <span class="ch-check" id="ck2"></span>
+      </button>
+      <button class="chapter-btn" onclick="goto(3)" id="cb3">
+        <span class="ch-num">4</span> Elektrische Sicherheit <span class="ch-check" id="ck3"></span>
+      </button>
+      <button class="chapter-btn" onclick="goto(4)" id="cb4">
+        <span class="ch-num">5</span> Brandschutz &amp; Gefahrstoffe <span class="ch-check" id="ck4"></span>
+      </button>
+      <button class="chapter-btn" onclick="goto(5)" id="cb5">
+        <span class="ch-num">6</span> Raumklima &amp; Beleuchtung <span class="ch-check" id="ck5"></span>
+      </button>
+      <button class="chapter-btn" onclick="goto(6)" id="cb6">
+        <span class="ch-num">📝</span> Abschlusstest <span class="ch-check" id="ck6"></span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content-area">
+
+    <!-- ══ MODUL 0: EINFÜHRUNG ══ -->
+    <div class="module active" id="mod0">
+      <div class="module-header">
+        <div class="module-tag">Kapitel 1 von 6</div>
+        <h2>Einführung &amp; Ihre Rechte und Pflichten</h2>
+        <p>Warum Arbeitssicherheit wichtig ist – und was das Gesetz von Ihnen verlangt.</p>
+      </div>
+      <div class="module-body">
+        <p style="font-size:14px;line-height:1.7;color:#333;">
+          Willkommen zur Pflichtunterweisung Arbeitssicherheit. Diese Schulung entspricht den gesetzlichen Anforderungen aus dem <strong>Arbeitsschutzgesetz (ArbSchG) §12</strong> und dem <strong>Arbeitssicherheitsgesetz (ASiG) §11</strong>. Sie erhalten nach erfolgreichem Abschluss ein digitales Teilnahmezertifikat.
+        </p>
+
+        <div class="highlight-box">
+          <strong>⚖️ Gesetzliche Verpflichtung:</strong> Nach ArbSchG §12 ist Ihr Arbeitgeber verpflichtet, Sie mindestens <strong>einmal jährlich</strong> zu unterweisen. Diese Unterweisung muss dokumentiert werden. Ihre Teilnahme wird mit Datum und Ihrem Zertifikat festgehalten.
+        </div>
+
+        <h3 class="section-title">Ihre Pflichten als Beschäftigte/r</h3>
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="law-badge">ArbSchG §15</span>
+            <h4>🎯 Mitwirkungspflicht</h4>
+            <ul>
+              <li>Schutzmaßnahmen beachten und unterstützen</li>
+              <li>Sicherheitseinrichtungen bestimmungsgemäß nutzen</li>
+              <li>Gefährdungen sofort melden</li>
+            </ul>
+          </div>
+          <div class="info-card warn">
+            <span class="law-badge">ArbSchG §16</span>
+            <h4>📢 Meldepflicht</h4>
+            <ul>
+              <li>Mängel und Gefahren unverzüglich dem Vorgesetzten melden</li>
+              <li>Unfälle und Beinahe-Unfälle anzeigen</li>
+              <li>Arbeiten bei ernster Gefahr einstellen dürfen</li>
+            </ul>
+          </div>
+          <div class="info-card ok">
+            <span class="law-badge">ArbSchG §17</span>
+            <h4>✅ Ihre Rechte</h4>
+            <ul>
+              <li>Recht auf sichere Arbeitsmittel</li>
+              <li>Recht auf arbeitsmedizinische Vorsorge</li>
+              <li>Beschwerderecht beim Betriebsrat / der Fachkraft für Arbeitssicherheit</li>
+            </ul>
+          </div>
+          <div class="info-card danger">
+            <span class="law-badge">§ 26 DGUV V1</span>
+            <h4>🚑 Erste Hilfe</h4>
+            <ul>
+              <li>Erste-Hilfe-Kasten: Eingang EG und OG Küche</li>
+              <li>Ersthelfer kennen und ansprechen</li>
+              <li>Notruf: <strong>112</strong></li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="section-title">Ihr Unternehmen – Gebäudeübersicht</h3>
+        <div class="info-card" style="margin-bottom:10px;">
+          <h4>🏢 Kaminvertriebshaus – Bürogebäude EG &amp; 1. OG</h4>
+          <p style="margin-top:6px;">
+            <strong>EG:</strong> Ausstellungsraum (Kaminexponate), 2 Konferenzräume, Büros, Eingangshalle, Flur<br>
+            <strong>OG:</strong> 6 Büros (Bildschirmarbeitsplätze), Küche, Pausenraum, 6 Toiletten, verbunden über Flur und Treppe<br>
+            <strong>Treppe:</strong> Einzige vertikale Verbindung → besonders auf Sicherheit achten!
+          </p>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" disabled>← Zurück</button>
+        <button class="btn btn-accent" onclick="nextModule(0)">Weiter →</button>
+      </div>
+    </div>
+
+    <!-- ══ MODUL 1: FLUCHTWEGE ══ -->
+    <div class="module" id="mod1">
+      <div class="module-header">
+        <div class="module-tag">Kapitel 2 von 6</div>
+        <h2>Fluchtwege, Notfallorganisation &amp; Erste Hilfe</h2>
+        <p>Was Sie im Notfall wissen und tun müssen – Leben retten kann einfach sein.</p>
+      </div>
+      <div class="module-body">
+        <div class="highlight-box">
+          <strong>⚠️ Wichtig:</strong> Im Brandfall oder Notfall zählt jede Sekunde. Kennen Sie Ihren Fluchtweg, den Sammelplatz und die Standorte der Feuerlöscher.
+        </div>
+
+        <h3 class="section-title">Flucht- und Rettungswege</h3>
+        <div class="info-grid">
+          <div class="info-card danger">
+            <span class="law-badge">ArbStättV §4</span><span class="law-badge">ASR A2.3</span>
+            <h4>🚪 Fluchtweg-Regeln</h4>
+            <ul>
+              <li>Flure und Treppenhäuser <strong>immer freihalten</strong> – keine Kartons, Stühle, Gegenstände!</li>
+              <li>Notausgänge dürfen <strong>nicht abgesperrt</strong> sein</li>
+              <li>Brandschutztüren müssen stets geschlossen sein</li>
+              <li>Grüne Rettungszeichen zeigen den Weg</li>
+            </ul>
+          </div>
+          <div class="info-card warn">
+            <h4>📍 Sammelplatz &amp; Verhalten</h4>
+            <ul>
+              <li>Sammelplatz: <strong>Firmenparkplatz vor dem Gebäude</strong></li>
+              <li>Fenster und Türen schließen (nicht abschließen)</li>
+              <li>Aufzüge <strong>nicht</strong> benutzen (falls vorhanden)</li>
+              <li>Auf Anweisung der Feuerwehr warten</li>
+              <li>Vollzähligkeit beim Vorgesetzten melden</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="section-title">Alarmierung &amp; Notruf</h3>
+        <div class="info-card ok" style="margin-bottom:12px;">
+          <h4>📞 Notfallnummern</h4>
+          <p>
+            <strong>Notruf Feuerwehr/Rettung: 112</strong><br>
+            <strong>Polizei: 110</strong><br>
+            Betrieblichen Ersthelfer rufen · Vorgesetzten informieren · Unfallbericht ausfüllen
+          </p>
+        </div>
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="law-badge">§26 DGUV V1</span>
+            <h4>🩹 Erste-Hilfe-Kasten</h4>
+            <ul>
+              <li>Standort EG: Eingangsbereich</li>
+              <li>Standort OG: Küche</li>
+              <li>Inhalt nach DIN 13157</li>
+              <li>Bei Benutzung: Nachfüllung melden!</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h4>🧯 Feuerlöscher</h4>
+            <ul>
+              <li>Standorte laut Flucht- und Rettungsplan</li>
+              <li>Prüfplakette beachten (alle 2 Jahre)</li>
+              <li>Nur bei kleinen Entstehungsbränden benutzen</li>
+              <li>PASS: Ziehen – Anvisieren – Drücken – Schwenken</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="section-title">Treppe – besondere Vorsicht</h3>
+        <p style="font-size:13px;line-height:1.65;color:#444;">
+          Die Treppe zwischen EG und OG ist der einzige vertikale Verbindungsweg. Halten Sie das Geländer fest, tragen Sie beim Transport schwerer Gegenstände keine Schuhe mit Absätzen und achten Sie auf rutschige Flächen (z. B. nach Reinigung).
+        </p>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goto(0)">← Zurück</button>
+        <button class="btn btn-accent" onclick="nextModule(1)">Weiter →</button>
+      </div>
+    </div>
+
+    <!-- ══ MODUL 2: ERGONOMIE ══ -->
+    <div class="module" id="mod2">
+      <div class="module-header">
+        <div class="module-tag">Kapitel 3 von 6</div>
+        <h2>Bildschirmarbeit &amp; Ergonomie</h2>
+        <p>Rücken, Augen und Gelenke schützen – täglich, ohne Aufwand.</p>
+      </div>
+      <div class="module-body">
+        <div class="highlight-box">
+          <strong>📊 Wussten Sie?</strong> Muskel-Skelett-Erkrankungen sind die häufigste Ursache von Arbeitsunfähigkeit in Büros. Richtiges Sitzen und regelmäßige Pausen können das Risiko um bis zu 60 % senken.
+        </div>
+
+        <h3 class="section-title">Der ergonomische Bildschirmarbeitsplatz</h3>
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="law-badge">ArbStättV Anh.6</span>
+            <h4>🖥️ Bildschirm</h4>
+            <ul>
+              <li>Sehabstand: <strong>50–80 cm</strong></li>
+              <li>Oberkante des Monitors in <strong>Augenhöhe</strong> oder leicht darunter</li>
+              <li>Kein Bildschirm direkt vor oder hinter einem Fenster (Blendung)</li>
+              <li>Flimmerfrei, mindestens 70 Hz Bildwiederholrate</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <span class="law-badge">DGUV I 215-410</span>
+            <h4>🪑 Sitzposition</h4>
+            <ul>
+              <li>Rückenlehne anlehnen, Lordose unterstützen</li>
+              <li>Oberschenkel waagerecht oder leicht abfallend</li>
+              <li>Füße flach auf dem Boden oder Fußstütze</li>
+              <li>Schultern entspannt, Arme waagerecht zur Tastatur</li>
+            </ul>
+          </div>
+          <div class="info-card warn">
+            <h4>⏱️ Bildschirmpausen</h4>
+            <ul>
+              <li>Nach <strong>50–55 Minuten</strong> Bildschirmarbeit: <strong>5 Minuten Pause</strong></li>
+              <li>Augen in die Ferne schauen (20-20-20-Regel: alle 20 Min., 20 Sek., 6 m Distanz)</li>
+              <li>Aufstehen, stretchen, bewegen</li>
+            </ul>
+          </div>
+          <div class="info-card ok">
+            <span class="law-badge">ArbMedVV G37</span>
+            <h4>👁️ Augenvorsorge</h4>
+            <ul>
+              <li>Recht auf augenärztliche Untersuchung auf Kosten des Arbeitgebers</li>
+              <li>Bei Beschwerden sofort beim Vorgesetzten melden</li>
+              <li>Spezielle Bildschirmarbeitsbrille wird ggf. bezuschusst</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="section-title">Häufige Fehler – und wie Sie sie vermeiden</h3>
+        <div class="info-card danger">
+          <h4>❌ Diese Fehler kosten Sie Ihre Gesundheit</h4>
+          <ul style="line-height:1.9;">
+            <li>Bildschirm zu nah oder zu weit weg – <em>Kopfschmerzen, Augenprobleme</em></li>
+            <li>Stuhl zu niedrig oder zu hoch – <em>Rücken- und Nackenschmerzen</em></li>
+            <li>Keine Pausen bei Bildschirmarbeit – <em>kognitive Ermüdung, Fehler</em></li>
+            <li>Kabel und Gegenstände unter dem Schreibtisch – <em>Stolper- und Haltungsschäden</em></li>
+            <li>Getränke neben der Tastatur – <em>Kurzschluss- und Sachschadengefahr</em></li>
+          </ul>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goto(1)">← Zurück</button>
+        <button class="btn btn-accent" onclick="nextModule(2)">Weiter →</button>
+      </div>
+    </div>
+
+    <!-- ══ MODUL 3: ELEKTRO ══ -->
+    <div class="module" id="mod3">
+      <div class="module-header">
+        <div class="module-tag">Kapitel 4 von 6</div>
+        <h2>Elektrische Sicherheit am Arbeitsplatz</h2>
+        <p>Strom ist unsichtbar – die Gefahren sind es nicht.</p>
+      </div>
+      <div class="module-body">
+        <div class="highlight-box">
+          <strong>⚡ Merksatz:</strong> <strong>Elektrische Geräte niemals selbst reparieren!</strong> Auch scheinbar kleine Defekte (Kabelbruch, lockere Stecker) können lebensgefährlich sein. Immer melden – sofort außer Betrieb nehmen.
+        </div>
+
+        <h3 class="section-title">Ihre Pflichten bei elektrischen Geräten</h3>
+        <div class="info-grid">
+          <div class="info-card danger">
+            <span class="law-badge">BetrSichV §4</span>
+            <h4>🔌 Defekte sofort melden</h4>
+            <ul>
+              <li>Beschädigte Kabel oder Stecker → sofort außer Betrieb</li>
+              <li>Gerät mit Klebezettel „DEFEKT – nicht benutzen" kennzeichnen</li>
+              <li>Vorgesetzten informieren, Reparatur durch Fachmann</li>
+            </ul>
+          </div>
+          <div class="info-card warn">
+            <h4>⚠️ Verboten</h4>
+            <ul>
+              <li>Eigenreparaturen an elektrischen Geräten</li>
+              <li>Geräte ohne Prüfplakette (DGUV V3) benutzen</li>
+              <li>Steckdosen überlasten (max. 3.500 W je Steckdose)</li>
+              <li>Kabel unter Teppichen oder Türen verlegen</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <span class="law-badge">DGUV V3</span>
+            <h4>🔍 Prüfpflichten</h4>
+            <ul>
+              <li>Ortsveränderliche Geräte: Prüfung alle <strong>1–2 Jahre</strong></li>
+              <li>Ortsfeste Anlagen: alle <strong>4 Jahre</strong> (E-Check)</li>
+              <li>Prüfplakette am Gerät prüfen – abgelaufen? Melden!</li>
+            </ul>
+          </div>
+          <div class="info-card ok">
+            <h4>✅ Richtiges Verhalten</h4>
+            <ul>
+              <li>Computer beim Verlassen des Büros in Standby oder ausschalten</li>
+              <li>Ladekabel nicht dauerhaft stecken gelassen</li>
+              <li>Keine privaten Geräte ohne Erlaubnis anschließen</li>
+              <li>Drucker in belüftetem Bereich betreiben</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="section-title">Was tun bei einem Stromunfall?</h3>
+        <div class="info-card danger">
+          <h4>🆘 Sofortmaßnahmen – in dieser Reihenfolge!</h4>
+          <p style="line-height:1.9; margin-top:6px;">
+            1. <strong>Nicht anfassen!</strong> Selbst in Gefahr bringen verboten.<br>
+            2. Strom abschalten – Sicherung raus oder Stecker ziehen (wenn sicher möglich).<br>
+            3. <strong>Notruf 112</strong> – auch bei scheinbar geringen Verletzungen, da Herzrhythmusstörungen auftreten können.<br>
+            4. Erste Hilfe leisten (Stabile Seitenlage / HLW wenn nötig).<br>
+            5. Vorgesetzten informieren, Unfall dokumentieren.
+          </p>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goto(2)">← Zurück</button>
+        <button class="btn btn-accent" onclick="nextModule(3)">Weiter →</button>
+      </div>
+    </div>
+
+    <!-- ══ MODUL 4: BRANDSCHUTZ ══ -->
+    <div class="module" id="mod4">
+      <div class="module-header">
+        <div class="module-tag">Kapitel 5 von 6</div>
+        <h2>Brandschutz &amp; Gefahrstoffe</h2>
+        <p>Ein Entstehungsbrand dauert 30 Sekunden – Ihr Wissen kann Leben retten.</p>
+      </div>
+      <div class="module-body">
+        <h3 class="section-title">Brandschutzregeln im Büroalltag</h3>
+        <div class="info-grid">
+          <div class="info-card danger">
+            <span class="law-badge">ArbStättV §4</span>
+            <h4>🔥 Zündquellen vermeiden</h4>
+            <ul>
+              <li>Kein offenes Feuer in Büroräumen</li>
+              <li>Kerzen am Arbeitsplatz verboten</li>
+              <li>Elektrogeräte nach Feierabend ausschalten</li>
+              <li>Papier und brennbare Materialien nicht auf Heizkörpern ablegen</li>
+            </ul>
+          </div>
+          <div class="info-card warn">
+            <h4>🚪 Im Brandfall – RETTEN statt löschen</h4>
+            <ul>
+              <li>Ruhe bewahren, Alarm auslösen</li>
+              <li>Kollegen warnen, Türen schließen</li>
+              <li>Gebäude über Fluchtweg verlassen</li>
+              <li>Aufzug <strong>nicht</strong> benutzen</li>
+              <li>Feuerwehr rufen: <strong>112</strong></li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h4>🧯 Feuerlöscher richtig einsetzen</h4>
+            <p><strong>P·A·S·S-Methode:</strong></p>
+            <ul>
+              <li><strong>P</strong>in ziehen (Sicherung)</li>
+              <li><strong>A</strong>nvisieren (auf Brandherd richten)</li>
+              <li><strong>S</strong>queezing (Hebel drücken)</li>
+              <li><strong>S</strong>weeping (von Seite zu Seite)</li>
+            </ul>
+          </div>
+          <div class="info-card ok">
+            <h4>📋 Brandschutzordnung</h4>
+            <ul>
+              <li>Hängt im Eingangsbereich aus (Teil A, B, C)</li>
+              <li>Teil A: Allgemeinverfügung für alle</li>
+              <li>Teil B: Für alle Mitarbeiter/innen</li>
+              <li>Teil C: Für besondere Personengruppen</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="section-title">Gefahrstoffe im Büro</h3>
+        <div class="info-grid">
+          <div class="info-card warn">
+            <span class="law-badge">GefStoffV §8</span>
+            <h4>🧴 Reinigungsmittel</h4>
+            <ul>
+              <li>Nur in Originalverpackung aufbewahren</li>
+              <li>Getrennt von Lebensmitteln lagern (Putzschrank)</li>
+              <li>Sicherheitsdatenblatt (SDB) liegt beim Vorgesetzten</li>
+              <li>Bei Augenkontakt: sofort mit Wasser spülen, Arzt aufsuchen</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <span class="law-badge">DGUV I 215-410</span>
+            <h4>🖨️ Druckertonerstaub</h4>
+            <ul>
+              <li>Drucker in belüfteten Bereichen aufstellen</li>
+              <li>Toner-Wechsel: Schutzhandschuhe tragen, gut lüften</li>
+              <li>Verschütteten Toner nicht einatmen</li>
+              <li>Drucker regelmäßig warten lassen</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goto(3)">← Zurück</button>
+        <button class="btn btn-accent" onclick="nextModule(4)">Weiter →</button>
+      </div>
+    </div>
+
+    <!-- ══ MODUL 5: KLIMA ══ -->
+    <div class="module" id="mod5">
+      <div class="module-header">
+        <div class="module-tag">Kapitel 6 von 6</div>
+        <h2>Raumklima, Beleuchtung &amp; psychische Gesundheit</h2>
+        <p>Unsichtbare Einflüsse – spürbare Wirkung auf Leistung und Wohlbefinden.</p>
+      </div>
+      <div class="module-body">
+        <h3 class="section-title">Raumklima – Ihre Einflussmöglichkeiten</h3>
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="law-badge">ASR A3.5</span>
+            <h4>🌡️ Temperatur</h4>
+            <ul>
+              <li>Optimal: <strong>20–22 °C</strong> (Büro, sitzende Tätigkeit)</li>
+              <li>Max. 26 °C – bei höheren Temperaturen: Schutzmaßnahmen</li>
+              <li>Fenster lüften: kurz und intensiv (Stoßlüftung) statt dauerhaft kippen</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <span class="law-badge">ASR A3.6</span>
+            <h4>💧 Luftfeuchtigkeit &amp; Lüftung</h4>
+            <ul>
+              <li>Relative Feuchte: <strong>40–60 %</strong></li>
+              <li>Zu trockene Luft: Reizung der Schleimhäute</li>
+              <li>Mind. 40 m³ Frischluft/h pro Person</li>
+              <li>Lüftungsanlage muss jährlich gewartet werden</li>
+            </ul>
+          </div>
+          <div class="info-card warn">
+            <span class="law-badge">ASR A3.4</span>
+            <h4>💡 Beleuchtung</h4>
+            <ul>
+              <li>Büro: mind. <strong>500 Lux</strong></li>
+              <li>Konferenzraum: mind. <strong>300 Lux</strong></li>
+              <li>Flure: mind. <strong>100 Lux</strong></li>
+              <li>Direkte Blendung durch Fenster: Jalousien schließen</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <span class="law-badge">ASR A3.7</span>
+            <h4>🔈 Lärm</h4>
+            <ul>
+              <li>Konzentrationstätigkeit: max. <strong>55 dB(A)</strong></li>
+              <li>Laute Gespräche in Büroräumen vermeiden</li>
+              <li>Telefonieren in Konferenzräumen oder separaten Bereichen</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 class="section-title">Psychische Gesundheit am Arbeitsplatz</h3>
+        <div class="highlight-box">
+          <strong>🧠 Psychische Belastungen sind genauso ernst zu nehmen wie körperliche!</strong> Laut ArbSchG §5 Abs.3 Nr.6 müssen auch psychische Belastungen in der Gefährdungsbeurteilung berücksichtigt werden.
+        </div>
+        <div class="info-grid">
+          <div class="info-card ok">
+            <h4>✅ Was hilft</h4>
+            <ul>
+              <li>Pausen wirklich nutzen – Handy weglegen</li>
+              <li>Arbeitsaufgaben klar kommunizieren</li>
+              <li>Bei Überlastung: früh ansprechen</li>
+              <li>Kollegialer Umgang fördert Resilienz</li>
+            </ul>
+          </div>
+          <div class="info-card">
+            <h4>📞 Ansprechpartner bei Problemen</h4>
+            <ul>
+              <li>Direkte Führungskraft</li>
+              <li>Betriebsrat (falls vorhanden)</li>
+              <li>Betriebsarzt (bei gesundheitl. Fragen)</li>
+              <li>Fachkraft für Arbeitssicherheit</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="highlight-box" style="background:#e8f5e9;border-color:#81c784;margin-top:20px;">
+          <strong>🎉 Glückwunsch!</strong> Sie haben alle 6 Kapitel abgeschlossen. Beantworten Sie jetzt den Abschlusstest, um Ihr Teilnahmezertifikat zu erhalten.
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goto(4)">← Zurück</button>
+        <button class="btn btn-accent" onclick="nextModule(5)">Zum Abschlusstest →</button>
+      </div>
+    </div>
+
+    <!-- ══ MODUL 6: QUIZ ══ -->
+    <div class="module quiz-module" id="mod6">
+      <div class="module-header" style="background:linear-gradient(135deg,#2c3e50,#34495e);">
+        <div class="module-tag">Abschlusstest</div>
+        <h2>Wissensüberprüfung – 12 Fragen</h2>
+        <p>Mindestens 9 von 12 richtige Antworten für ein Zertifikat. Jede Frage nur einmal beantworten.</p>
+      </div>
+      <div class="module-body" id="quiz-body">
+        <!-- Questions injected by JS -->
+      </div>
+      <div class="nav-row">
+        <button class="btn btn-ghost" onclick="goto(5)">← Lerninhalt nochmals ansehen</button>
+        <button class="btn btn-accent" id="submit-btn" onclick="submitQuiz()" disabled>Test auswerten →</button>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="module" id="mod-result">
+      <div class="result-screen">
+        <div id="result-icon" class="result-icon"></div>
+        <h2 class="result-title" id="result-title"></h2>
+        <div class="score-circle" id="score-circle">
+          <div class="score-inner" id="score-inner"></div>
+        </div>
+        <p class="result-sub" id="result-sub"></p>
+        <div class="cert-box" id="cert-box" style="display:none">
+          <h3>🏅 Teilnahme-Zertifikat</h3>
+          <p id="cert-text"></p>
+        </div>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="printCert()" id="print-btn" style="display:none">🖨️ Zertifikat drucken / speichern</button>
+          <button class="btn btn-ghost" onclick="retryQuiz()">🔄 Test wiederholen</button>
+          <button class="btn btn-ghost" onclick="goto(0)">📚 Von vorne beginnen</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ─── STATE ────────────────────────────────────────────────────────────────────
+const TOTAL_MODULES = 7; // 6 chapters + quiz
+let done = new Array(TOTAL_MODULES).fill(false);
+let current = 0;
+let participantName = "";
+
+// ─── QUESTIONS ───────────────────────────────────────────────────────────────
+const questions = [
+  {
+    q: "Welche Mindestbreite müssen Fluchtwege nach ASR A2.3 haben?",
+    opts: ["0,75 Meter","1,00 Meter","1,20 Meter","0,90 Meter"],
+    correct: 1,
+    explain: "Fluchtwege müssen laut ASR A2.3 mindestens 1,00 Meter breit sein und dürfen nicht verstellt werden."
+  },
+  {
+    q: "Wie oft müssen ortsveränderliche elektrische Betriebsmittel im Büro laut DGUV V3 mindestens geprüft werden?",
+    opts: ["Alle 5 Jahre","Alle 3 Jahre","Alle 1–2 Jahre","Nur bei sichtbaren Schäden"],
+    correct: 2,
+    explain: "Ortsveränderliche Betriebsmittel sind im Bürobereich alle 1–2 Jahre nach DGUV V3 zu prüfen."
+  },
+  {
+    q: "Sie entdecken ein beschädigtes Netzkabel an Ihrem PC. Was tun Sie zuerst?",
+    opts: ["Gerät weiterverwenden – kleiner Schaden","Selbst mit Isolierband reparieren","Gerät sofort außer Betrieb nehmen und melden","Auf Feierabend warten und dann melden"],
+    correct: 2,
+    explain: "Defekte Geräte sofort außer Betrieb nehmen und kennzeichnen (BetrSichV §4). Reparaturen nur durch Fachpersonal!"
+  },
+  {
+    q: "Welche Beleuchtungsstärke ist laut ASR A3.4 mindestens an Büroarbeitsplätzen einzuhalten?",
+    opts: ["200 Lux","300 Lux","500 Lux","750 Lux"],
+    correct: 2,
+    explain: "An Büroarbeitsplätzen sind mindestens 500 Lux nach ASR A3.4 / DIN EN 12464-1 erforderlich."
+  },
+  {
+    q: "Was ist die korrekte Reihenfolge beim Einsatz eines Feuerlöschers (PASS)?",
+    opts: [
+      "Drücken – Anvisieren – Ziehen – Schwenken",
+      "Ziehen – Anvisieren – Drücken – Schwenken",
+      "Schwenken – Drücken – Anvisieren – Ziehen",
+      "Anvisieren – Ziehen – Schwenken – Drücken"
+    ],
+    correct: 1,
+    explain: "P·A·S·S: Pin ziehen → Anvisieren → Squeezing (drücken) → Sweeping (schwenken)."
+  },
+  {
+    q: "Wie lange darf man laut Empfehlung maximal ohne Unterbrechung an einem Bildschirm arbeiten?",
+    opts: ["30 Minuten","50–55 Minuten","90 Minuten","120 Minuten"],
+    correct: 1,
+    explain: "Nach 50–55 Minuten Bildschirmarbeit sollte eine Kurzpause von mind. 5 Minuten eingelegt werden (DGUV I 215-410)."
+  },
+  {
+    q: "Was müssen Sie im Brandfall auf keinen Fall benutzen?",
+    opts: ["Feuerlöscher","Treppenhaus","Aufzug","Notruf 112"],
+    correct: 2,
+    explain: "Im Brandfall niemals den Aufzug benutzen – Stromausfall und Rauchentwicklung machen ihn lebensgefährlich. Fluchtweg über Treppe nehmen."
+  },
+  {
+    q: "Welcher Paragraph des ArbSchG verpflichtet Arbeitgeber zur jährlichen Unterweisung der Mitarbeiter?",
+    opts: ["§5 ArbSchG","§6 ArbSchG","§12 ArbSchG","§15 ArbSchG"],
+    correct: 2,
+    explain: "§12 ArbSchG regelt die Unterweisungspflicht: Mitarbeiter müssen mind. 1× jährlich unterwiesen werden."
+  },
+  {
+    q: "Welche optimale relative Luftfeuchtigkeit sollte in Büroräumen nach ASR A3.6 vorliegen?",
+    opts: ["20–30 %","40–60 %","60–80 %","70–90 %"],
+    correct: 1,
+    explain: "40–60 % relative Feuchte ist der optimale Bereich. Darunter entstehen Reizungen der Atemwege."
+  },
+  {
+    q: "Auf welche Notrufnummer rufen Sie bei einem Unfall mit Verletzten?",
+    opts: ["110","115","112","118"],
+    correct: 2,
+    explain: "Notruf 112 ist die europaweite Notrufnummer für Feuerwehr und Rettungsdienst – kostenlos, 24/7."
+  },
+  {
+    q: "Welcher Abstand zwischen Augen und Bildschirm ist nach DGUV I 215-410 empfohlen?",
+    opts: ["30–40 cm","50–80 cm","90–120 cm","Mehr als 120 cm"],
+    correct: 1,
+    explain: "Der empfohlene Sehabstand beträgt 50–80 cm. Der Bildschirm sollte leicht unter Augenhöhe stehen."
+  },
+  {
+    q: "Was regelt ASiG §11 in Bezug auf Ihr Unternehmen?",
+    opts: [
+      "Urlaubsanspruch der Mitarbeiter",
+      "Arbeitszeit und Pausenregelungen",
+      "Den Arbeitsschutzausschuss mit Fachkraft für Arbeitssicherheit und Betriebsarzt",
+      "Datenschutz im Büro"
+    ],
+    correct: 2,
+    explain: "ASiG §11 regelt den Arbeitsschutzausschuss und die Aufgaben von Fachkräften für Arbeitssicherheit und Betriebsärzten."
+  }
+];
+
+// ─── BUILD QUIZ ───────────────────────────────────────────────────────────────
+let answered = new Array(questions.length).fill(null);
+
+function buildQuiz() {
+  const body = document.getElementById("quiz-body");
+  body.innerHTML = "";
+
+  // Name field
+  const nameDiv = document.createElement("div");
+  nameDiv.style.cssText = "margin-bottom:24px;padding:16px;background:#f4f6fa;border-radius:10px;";
+  nameDiv.innerHTML = `
+    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;">
+      📝 Ihr Name (für das Zertifikat):
+    </label>
+    <input id="participant-name" type="text" placeholder="Vorname Nachname"
+      style="width:100%;padding:10px 14px;border:2px solid #dde3ee;border-radius:7px;font-family:inherit;font-size:13px;"
+      oninput="checkReady()">
+  `;
+  body.appendChild(nameDiv);
+
+  questions.forEach((q, qi) => {
+    const div = document.createElement("div");
+    div.className = "quiz-q";
+    div.id = `q${qi}`;
+    let opts = q.opts.map((o, oi) => `
+      <button class="answer-btn" id="q${qi}o${oi}" onclick="selectAnswer(${qi},${oi})">
+        <span style="font-weight:700;margin-right:8px;">${String.fromCharCode(65+oi)}.</span>${o}
+      </button>
+    `).join("");
+    div.innerHTML = `
+      <div class="q-num">Frage ${qi+1} / ${questions.length}</div>
+      <div class="q-text">${q.q}</div>
+      ${opts}
+      <div class="feedback-msg" id="fb${qi}"></div>
+    `;
+    body.appendChild(div);
+  });
+}
+
+function selectAnswer(qi, oi) {
+  if (answered[qi] !== null) return;
+  answered[qi] = oi;
+  const q = questions[qi];
+
+  // Style all options
+  for (let i = 0; i < q.opts.length; i++) {
+    const btn = document.getElementById(`q${qi}o${i}`);
+    btn.disabled = true;
+    if (i === q.correct) btn.classList.add("correct");
+    else if (i === oi) btn.classList.add("wrong");
+  }
+
+  const fb = document.getElementById(`fb${qi}`);
+  if (oi === q.correct) {
+    fb.textContent = "✅ Richtig! " + q.explain;
+    fb.className = "feedback-msg ok";
+  } else {
+    fb.textContent = "❌ Leider falsch. " + q.explain;
+    fb.className = "feedback-msg bad";
+  }
+  checkReady();
+}
+
+function checkReady() {
+  const nameVal = document.getElementById("participant-name")?.value.trim() || "";
+  const allAnswered = answered.every(a => a !== null);
+  document.getElementById("submit-btn").disabled = !(allAnswered && nameVal.length > 2);
+}
+
+// ─── SUBMIT QUIZ ─────────────────────────────────────────────────────────────
+function submitQuiz() {
+  const nameInput = document.getElementById("participant-name").value.trim();
+  participantName = nameInput || "Mitarbeiter/in";
+
+  let correct = 0;
+  questions.forEach((q, qi) => { if (answered[qi] === q.correct) correct++; });
+
+  const pct = Math.round(correct / questions.length * 100);
+  const passed = correct >= 9;
+
+  // Show result module
+  document.getElementById("mod6").classList.remove("active");
+  const resultMod = document.getElementById("mod-result");
+  resultMod.style.display = "block";
+  resultMod.classList.add("active");
+
+  document.getElementById("result-icon").textContent = passed ? "🏅" : "📚";
+  document.getElementById("result-title").textContent = passed ? "Bestanden – Herzlichen Glückwunsch!" : "Knapp nicht bestanden – kein Problem!";
+  document.getElementById("result-sub").textContent = `${correct} von ${questions.length} Fragen richtig (${pct} %) – Mindestpunktzahl: 9/12`;
+
+  const circle = document.getElementById("score-circle");
+  circle.style.setProperty("--pct", `${pct * 3.6}deg`);
+  if (!passed) circle.style.background = `conic-gradient(var(--accent) ${pct*3.6}deg, #e0e0e0 0)`;
+  document.getElementById("score-inner").textContent = `${pct}%`;
+
+  if (passed) {
+    done[6] = true;
+    markDone(6);
+    updateProgress();
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric"});
+    const certBox = document.getElementById("cert-box");
+    certBox.style.display = "block";
+    document.getElementById("cert-text").innerHTML = `
+      Hiermit wird bestätigt, dass<br><br>
+      <strong style="font-size:16px;">${participantName}</strong><br><br>
+      die Pflichtunterweisung <em>Arbeitssicherheit – Bürogebäude Kaminvertriebshaus</em><br>
+      gemäß <strong>ArbSchG §12 | ASiG §11 | DGUV V1 §4</strong><br>
+      am <strong>${dateStr}</strong> erfolgreich abgeschlossen hat.<br><br>
+      Ergebnis: <strong>${correct}/${questions.length} Fragen richtig (${pct}%)</strong>
+    `;
+    document.getElementById("print-btn").style.display = "inline-block";
+  }
+}
+
+function retryQuiz() {
+  answered = new Array(questions.length).fill(null);
+  document.getElementById("mod-result").classList.remove("active");
+  document.getElementById("mod-result").style.display = "none";
+  buildQuiz();
+  document.getElementById("mod6").classList.add("active");
+  document.getElementById("submit-btn").disabled = true;
+  updateSidebar(6);
+}
+
+function printCert() { window.print(); }
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function goto(idx) {
+  document.querySelectorAll(".module").forEach(m => { m.classList.remove("active"); m.style.display = ""; });
+  document.getElementById(`mod${idx}`).classList.add("active");
+  document.querySelectorAll(".chapter-btn").forEach((b,i) => b.classList.toggle("active", i === idx));
+  current = idx;
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function nextModule(idx) {
+  done[idx] = true;
+  markDone(idx);
+  updateProgress();
+  const next = idx + 1;
+  if (next === 6) {
+    buildQuiz();
+  }
+  goto(next);
+}
+
+function markDone(idx) {
+  const cb = document.getElementById(`cb${idx}`);
+  if (!cb) return;
+  cb.classList.add("done");
+  document.getElementById(`ck${idx}`).textContent = "✓";
+}
+
+function updateSidebar(idx) {
+  document.querySelectorAll(".chapter-btn").forEach((b,i) => b.classList.toggle("active", i === idx));
+}
+
+function updateProgress() {
+  const count = done.filter(Boolean).length;
+  const pct = Math.round(count / TOTAL_MODULES * 100);
+  document.getElementById("prog-fill").style.width = pct + "%";
+  document.getElementById("pct-label").textContent = pct + " %";
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+document.getElementById("mod-result").style.display = "none";
+</script>
+</body>
+</html>
