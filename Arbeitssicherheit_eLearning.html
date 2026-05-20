@@ -106,6 +106,20 @@
   .chapter-btn.active { background: var(--light); color: var(--navy); font-weight: 600; }
   .chapter-btn.done { color: var(--green); }
   .chapter-btn.done .ch-num { background: var(--green); }
+  .chapter-btn.locked {
+    opacity: .45;
+    cursor: not-allowed;
+  }
+  .chapter-btn.locked:hover {
+    background: none;
+    color: var(--muted);
+  }
+  .quiz-lock-hint {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .quiz-lock-hint strong { color: var(--navy); }
   .ch-num {
     width: 22px; height: 22px; border-radius: 50%;
     background: var(--blue);
@@ -579,7 +593,7 @@
       </div>
       <div class="module-body">
         <div class="highlight-box">
-          <strong>⚠️ Wichtig:</strong> Im Brandfall oder Notfall zählt jede Sekunde. Kennen Sie Ihren Fluchtweg, den Sammelplatz und die Standorte der Feuerlöscher.
+          <strong>⚠️ Wichtig:</strong> Im Brandfall oder Notfall zählt jede Sekunde. Kennen Sie Ihren Fluchtweg, den Sammelplatz und die Standorte der Feuerlöscher. Fluchtwege müssen außerdem jederzeit frei bleiben und eine <strong>Mindestbreite von 1,00 Meter</strong> haben.
         </div>
 
         <h3 class="section-title">Flucht- und Rettungswege</h3>
@@ -967,7 +981,9 @@
         <!-- Questions injected by JS -->
       </div>
       <div class="nav-row">
-        <button class="btn btn-ghost" onclick="goto(5)">← Lerninhalt nochmals ansehen</button>
+        <div class="quiz-lock-hint" id="quiz-lock-notice">
+          <strong>Hinweis:</strong> Sobald der Abschlusstest gestartet wurde, ist eine Rückkehr zu den Infopunkten nicht mehr möglich.
+        </div>
         <button class="btn btn-accent" id="submit-btn" onclick="submitQuiz()" disabled>Test auswerten →</button>
       </div>
     </div>
@@ -988,7 +1004,7 @@
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
           <button class="btn btn-primary" onclick="showCertOverlay()" id="print-btn" style="display:none">🏅 Zertifikat anzeigen &amp; drucken</button>
           <button class="btn btn-ghost" onclick="retryQuiz()">🔄 Test wiederholen</button>
-          <button class="btn btn-ghost" onclick="goto(0)">📚 Von vorne beginnen</button>
+          <button class="btn btn-ghost" onclick="restartTraining()">📚 Von vorne beginnen</button>
         </div>
       </div>
     </div>
@@ -1069,6 +1085,8 @@ let current = 0;
 let participantName = "";
 let activeQuestions = [];     // randomly selected subset
 let answered = [];
+let quizLocked = false;       // prevents returning to info modules during a started final test
+let quizStarted = false;
 
 // ─── FULL QUESTION POOL (20 questions) ───────────────────────────────────────
 const questionPool = [
@@ -1241,6 +1259,10 @@ function openNameEntry() {
 
 function closeNameEntry() {
   document.getElementById("mod-name-entry").style.display = "none";
+  // If the name dialog is cancelled before the actual test starts, return to the last learning module.
+  if (!quizStarted && current === 6) {
+    goto(5);
+  }
 }
 
 function checkPreName() {
@@ -1252,6 +1274,8 @@ function startQuizWithName() {
   const nameVal = document.getElementById("pre-name-input").value.trim();
   if (nameVal.length < 2) return;
   participantName = nameVal;
+  quizStarted = true;
+  setQuizLock(true);
   closeNameEntry();
   // Select random questions
   activeQuestions = shuffle(questionPool).slice(0, QUIZ_SIZE);
@@ -1400,7 +1424,25 @@ function retryQuiz() {
 }
 
 // ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function setQuizLock(locked) {
+  quizLocked = locked;
+  document.querySelectorAll(".chapter-btn").forEach((btn, i) => {
+    if (i < 6) btn.classList.toggle("locked", locked);
+  });
+}
+
+function showQuizLockNotice() {
+  const notice = document.getElementById("quiz-lock-notice");
+  if (!notice) return;
+  notice.innerHTML = '<strong>Hinweis:</strong> Der Abschlusstest ist gestartet. Eine Rückkehr zu den Infopunkten ist erst nach einem Neustart der Unterweisung möglich.';
+}
+
 function goto(idx) {
+  if (quizLocked && idx < 6) {
+    updateSidebar(6);
+    showQuizLockNotice();
+    return;
+  }
   document.querySelectorAll(".module").forEach(m => { m.classList.remove("active"); m.style.display = ""; });
   document.getElementById(`mod${idx}`).classList.add("active");
   document.querySelectorAll(".chapter-btn").forEach((b,i) => b.classList.toggle("active", i === idx));
@@ -1440,8 +1482,32 @@ function updateProgress() {
   document.getElementById("pct-label").textContent = pct + " %";
 }
 
+function restartTraining() {
+  setQuizLock(false);
+  quizStarted = false;
+  participantName = "";
+  activeQuestions = [];
+  answered = [];
+  done = new Array(TOTAL_MODULES).fill(false);
+
+  document.getElementById("mod-result").classList.remove("active");
+  document.getElementById("mod-result").style.display = "none";
+  document.getElementById("cert-box").style.display = "none";
+  document.getElementById("print-btn").style.display = "none";
+
+  document.querySelectorAll(".chapter-btn").forEach((btn, i) => {
+    btn.classList.remove("done", "locked");
+    const check = document.getElementById(`ck${i}`);
+    if (check) check.textContent = "";
+  });
+
+  updateProgress();
+  goto(0);
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 document.getElementById("mod-result").style.display = "none";
 </script>
 </body>
 </html>
+
