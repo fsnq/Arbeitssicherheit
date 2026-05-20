@@ -312,6 +312,125 @@
   .cert-box h3 { font-family: 'Source Serif 4', serif; font-size: 18px; color: var(--navy); margin-bottom: 6px; }
   .cert-box p  { font-size: 12.5px; color: #666; line-height: 1.6; }
 
+  /* ── NAME ENTRY SCREEN ── */
+  .name-entry-screen {
+    text-align: center;
+    padding: 52px 32px;
+  }
+  .name-entry-screen h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+  .name-entry-screen p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+  .name-input-wrap {
+    max-width: 400px;
+    margin: 0 auto 28px;
+    text-align: left;
+  }
+  .name-input-wrap label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .name-input-big {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #dde3ee;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    transition: border-color .2s;
+    outline: none;
+  }
+  .name-input-big:focus { border-color: var(--blue); }
+
+  /* ── CERTIFICATE PRINT ── */
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    body * { visibility: hidden !important; }
+    #cert-printable, #cert-printable * { visibility: visible !important; }
+    #cert-printable {
+      position: fixed !important;
+      inset: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: white !important;
+      padding: 0 !important;
+    }
+    .cert-paper {
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 12mm 18mm !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    .cert-paper .cert-logo { font-size: 36px !important; margin-bottom: 4px !important; }
+    .cert-paper .cert-company { margin-bottom: 10px !important; }
+    .cert-paper h2 { font-size: 22px !important; margin-bottom: 2px !important; }
+    .cert-paper .cert-sub { margin-bottom: 10px !important; }
+    .cert-paper .cert-name { font-size: 26px !important; margin: 8px 0 !important; }
+    .cert-paper .cert-score-badge { margin-bottom: 10px !important; }
+    .cert-paper .cert-footer { padding-top: 10px !important; margin-top: 4px !important; }
+    .cert-close-btn, .cert-paper > div:last-child { display: none !important; }
+  }
+  #cert-printable {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #cert-printable.show { display: flex; }
+  .cert-paper {
+    background: white;
+    border-radius: 16px;
+    padding: 40px 52px;
+    max-width: 680px;
+    width: 100%;
+    position: relative;
+    border: 6px double var(--gold);
+    box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    text-align: center;
+  }
+  .cert-paper .cert-logo { font-size: 44px; margin-bottom: 6px; }
+  .cert-paper .cert-company { font-size: 12px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-bottom:18px; }
+  .cert-paper h2 { font-family:'Source Serif 4',serif; font-size:26px; color:var(--navy); margin-bottom:4px; }
+  .cert-paper .cert-sub { font-size:13px; color:var(--muted); margin-bottom:18px; }
+  .cert-paper .cert-name { font-family:'Source Serif 4',serif; font-size:32px; color:var(--accent); font-weight:700; margin:14px 0; }
+  .cert-paper .cert-body { font-size:13px; color:#444; line-height:1.8; margin-bottom:16px; }
+  .cert-paper .cert-score-badge {
+    display:inline-block; background:var(--green); color:white;
+    padding:6px 20px; border-radius:99px; font-size:13px; font-weight:600;
+    margin-bottom:16px;
+  }
+  .cert-paper .cert-footer {
+    display:flex; justify-content:space-between; align-items:flex-end;
+    border-top:1px solid #e0e0e0; padding-top:14px; margin-top:6px;
+    font-size:11px; color:var(--muted);
+  }
+  .cert-paper .cert-seal { font-size:36px; }
+  .cert-close-btn {
+    position:absolute; top:14px; right:18px;
+    background:none; border:none; font-size:22px; cursor:pointer; color:#999;
+  }
+  .cert-close-btn:hover { color: var(--text); }
+
   /* Responsive */
   @media(max-width: 720px) {
     .main-wrap { grid-template-columns: 1fr; }
@@ -470,6 +589,7 @@
             <h4>🚪 Fluchtweg-Regeln</h4>
             <ul>
               <li>Flure und Treppenhäuser <strong>immer freihalten</strong> – keine Kartons, Stühle, Gegenstände!</li>
+              <li>Mindestbreite von Fluchtwegen: <strong>1,00 Meter</strong> (ASR A2.3 – darf nicht unterschritten werden!)</li>
               <li>Notausgänge dürfen <strong>nicht abgesperrt</strong> sein</li>
               <li>Brandschutztüren müssen stets geschlossen sein</li>
               <li>Grüne Rettungszeichen zeigen den Weg</li>
@@ -866,7 +986,7 @@
           <p id="cert-text"></p>
         </div>
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-          <button class="btn btn-primary" onclick="printCert()" id="print-btn" style="display:none">🖨️ Zertifikat drucken / speichern</button>
+          <button class="btn btn-primary" onclick="showCertOverlay()" id="print-btn" style="display:none">🏅 Zertifikat anzeigen &amp; drucken</button>
           <button class="btn btn-ghost" onclick="retryQuiz()">🔄 Test wiederholen</button>
           <button class="btn btn-ghost" onclick="goto(0)">📚 Von vorne beginnen</button>
         </div>
@@ -876,15 +996,82 @@
   </main>
 </div>
 
+<!-- ── NAME ENTRY MODULE (shown before quiz) ── -->
+<div id="mod-name-entry" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:500; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:white; border-radius:16px; max-width:480px; width:100%; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.35);">
+    <div style="background:linear-gradient(135deg,#2c3e50,#34495e); padding:28px 32px; color:white;">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9ab3d4;margin-bottom:8px;">Abschlusstest</div>
+      <h2 style="font-family:'Source Serif 4',serif;font-size:22px;font-weight:700;">Bitte geben Sie Ihren Namen ein</h2>
+      <p style="font-size:13px;color:#b8cfe8;margin-top:8px;line-height:1.5;">Der Name erscheint auf Ihrem Zertifikat. Es werden <strong style="color:white;" id="q-count-label">10</strong> Fragen zufällig ausgewählt – Bestehen ab 70 %.</p>
+    </div>
+    <div style="padding:28px 32px;">
+      <label style="display:block;font-size:13px;font-weight:600;color:#1a2b4a;margin-bottom:8px;">📝 Ihr vollständiger Name:</label>
+      <input id="pre-name-input" type="text" placeholder="Vorname Nachname"
+        style="width:100%;padding:13px 16px;border:2px solid #dde3ee;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:15px;outline:none;transition:border-color .2s;"
+        oninput="checkPreName()"
+        onfocus="this.style.borderColor='#2e5d9e'"
+        onblur="this.style.borderColor='#dde3ee'"
+        onkeydown="if(event.key==='Enter') startQuizWithName()">
+      <p style="font-size:11.5px;color:#6b7a99;margin-top:8px;">Mindestens 2 Zeichen. Keine Abkürzungen (z. B. „Max Mustermann").</p>
+      <button id="start-quiz-btn" class="btn btn-accent" onclick="startQuizWithName()" disabled
+        style="width:100%;margin-top:20px;padding:13px;font-size:14px;">
+        Test starten →
+      </button>
+      <button class="btn btn-ghost" onclick="closeNameEntry()" style="width:100%;margin-top:10px;">Abbrechen</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CERTIFICATE OVERLAY ── -->
+<div id="cert-printable">
+  <div class="cert-paper">
+    <button class="cert-close-btn" onclick="closeCertOverlay()" title="Schließen">✕</button>
+    <div class="cert-logo">🔥</div>
+    <div class="cert-company">Kaminvertriebshaus · Arbeitssicherheit</div>
+    <h2>Teilnahme-Zertifikat</h2>
+    <p class="cert-sub">Pflichtunterweisung Arbeitssicherheit · Bürogebäude</p>
+    <div style="border-top:1px solid #eee;border-bottom:1px solid #eee;padding:18px 0;margin:10px 0;">
+      <p style="font-size:13px;color:#666;margin-bottom:6px;">Hiermit wird bestätigt, dass</p>
+      <div class="cert-name" id="cert-overlay-name"></div>
+      <p style="font-size:13px;color:#444;line-height:1.7;">
+        die Pflichtunterweisung <strong>Arbeitssicherheit – Bürogebäude</strong><br>
+        gemäß <strong>ArbSchG §12 · ASiG §11 · DGUV V1 §4</strong><br>
+        am <span id="cert-overlay-date"></span> erfolgreich abgeschlossen hat.
+      </p>
+    </div>
+    <div class="cert-score-badge" id="cert-overlay-score"></div>
+    <div class="cert-footer">
+      <div>
+        <div style="font-weight:600;color:#333;font-size:12px;">Kaminvertriebshaus</div>
+        <div>Ausgestellt durch das E-Learning-System</div>
+      </div>
+      <div class="cert-seal">🏅</div>
+      <div style="text-align:right;">
+        <div style="font-weight:600;color:#333;font-size:12px;">Gültig bis</div>
+        <div id="cert-overlay-valid"></div>
+      </div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-primary" onclick="window.print()" style="font-size:13px;">🖨️ Drucken / als PDF speichern</button>
+      <button class="btn btn-ghost" onclick="closeCertOverlay()" style="font-size:13px;">Schließen</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ─── STATE ────────────────────────────────────────────────────────────────────
-const TOTAL_MODULES = 7; // 6 chapters + quiz
+const TOTAL_MODULES = 7;
+const QUIZ_SIZE = 10;         // questions shown per attempt
+const PASS_COUNT = 7;         // min correct to pass (70 %)
+
 let done = new Array(TOTAL_MODULES).fill(false);
 let current = 0;
 let participantName = "";
+let activeQuestions = [];     // randomly selected subset
+let answered = [];
 
-// ─── QUESTIONS ───────────────────────────────────────────────────────────────
-const questions = [
+// ─── FULL QUESTION POOL (20 questions) ───────────────────────────────────────
+const questionPool = [
   {
     q: "Welche Mindestbreite müssen Fluchtwege nach ASR A2.3 haben?",
     opts: ["0,75 Meter","1,00 Meter","1,20 Meter","0,90 Meter"],
@@ -966,30 +1153,129 @@ const questions = [
     ],
     correct: 2,
     explain: "ASiG §11 regelt den Arbeitsschutzausschuss und die Aufgaben von Fachkräften für Arbeitssicherheit und Betriebsärzten."
+  },
+  // ─── Weitere Fragen (Pool-Erweiterung) ───────────────────────────────────
+  {
+    q: "Welche Temperatur gilt nach ASR A3.5 als optimal für Büroarbeitsplätze mit sitzender Tätigkeit?",
+    opts: ["16–18 °C","20–22 °C","24–26 °C","28–30 °C"],
+    correct: 1,
+    explain: "ASR A3.5 empfiehlt 20–22 °C für Büroarbeitsplätze mit überwiegend sitzender Tätigkeit."
+  },
+  {
+    q: "Was bedeutet die Abkürzung ArbSchG?",
+    opts: ["Arbeitszeitschutzgesetz","Arbeitsschutzgesetz","Arbeitsschutzgrundsätze","Arbeitssicherheitsgesetz"],
+    correct: 1,
+    explain: "ArbSchG steht für Arbeitsschutzgesetz – es regelt die Pflichten von Arbeitgebern und Beschäftigten zur Verhütung von Arbeitsunfällen."
+  },
+  {
+    q: "Wo befindet sich laut Schulungsunterlage der Erste-Hilfe-Kasten im Obergeschoss?",
+    opts: ["Im Serverraum","Beim Empfang","In der Küche","Im Konferenzraum"],
+    correct: 2,
+    explain: "Der Erste-Hilfe-Kasten im OG befindet sich in der Küche (EG: Eingangsbereich). Inhalt nach DIN 13157."
+  },
+  {
+    q: "Was gilt laut ArbSchG §15 als Pflicht für alle Beschäftigten?",
+    opts: [
+      "Mindestens 30 Tage Urlaub nehmen",
+      "Schutzmaßnahmen beachten und Gefährdungen sofort melden",
+      "Eigenverantwortlich elektrische Geräte reparieren",
+      "Arbeitssicherheitsbeauftragte selbst benennen"
+    ],
+    correct: 1,
+    explain: "§15 ArbSchG (Mitwirkungspflicht): Beschäftigte müssen Schutzmaßnahmen unterstützen und Gefährdungen unverzüglich melden."
+  },
+  {
+    q: "Bis zu welcher maximalen Raumtemperatur gelten laut ASR A3.5 in Büros keine weiteren Schutzmaßnahmen?",
+    opts: ["22 °C","24 °C","26 °C","30 °C"],
+    correct: 2,
+    explain: "Bis 26 °C sind in Büros keine zusätzlichen Schutzmaßnahmen erforderlich. Darüber hinaus müssen Maßnahmen ergriffen werden (z. B. Jalousien, Lüftung)."
+  },
+  {
+    q: "Wie häufig müssen Feuerlöscher laut Vorgabe geprüft werden?",
+    opts: ["Jährlich","Alle 2 Jahre","Alle 5 Jahre","Nur bei sichtbaren Schäden"],
+    correct: 1,
+    explain: "Feuerlöscher müssen alle 2 Jahre von einem Sachkundigen geprüft werden – erkennbar an der Prüfplakette."
+  },
+  {
+    q: "Was schreibt die 20-20-20-Regel für Bildschirmarbeit vor?",
+    opts: [
+      "Alle 20 Stunden 20 Minuten Pause bei 20 °C",
+      "Alle 20 Minuten 20 Sekunden in 6 Meter (ca. 20 Fuß) Entfernung schauen",
+      "20 cm Abstand, 20 Lux Helligkeit, 20 Minuten Pause",
+      "Alle 20 Minuten den Bildschirm 20 cm verschieben"
+    ],
+    correct: 1,
+    explain: "Die 20-20-20-Regel: alle 20 Minuten für 20 Sekunden auf einen Punkt 6 m (≈ 20 Fuß) entfernt schauen – entlastet die Augenmuskulatur."
+  },
+  {
+    q: "Was müssen Sie als erstes tun, wenn Sie Zeuge eines Stromunfalls werden?",
+    opts: [
+      "Verletzte Person sofort anfassen und wegziehen",
+      "Strom abschalten und dann Notruf 112 wählen",
+      "Person nicht anfassen, Strom abschalten (wenn sicher), Notruf 112",
+      "Erste Hilfe leisten und danach Strom abschalten"
+    ],
+    correct: 2,
+    explain: "Nie die verletzte Person anfassen! Erst Strom sicher abschalten (Sicherung/Stecker), dann sofort Notruf 112 wählen – auch bei scheinbar leichten Verletzungen."
   }
 ];
 
-// ─── BUILD QUIZ ───────────────────────────────────────────────────────────────
-let answered = new Array(questions.length).fill(null);
+// ─── SHUFFLE HELPER ──────────────────────────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
+// ─── NAME ENTRY (shown before quiz) ──────────────────────────────────────────
+function openNameEntry() {
+  document.getElementById("pre-name-input").value = "";
+  document.getElementById("start-quiz-btn").disabled = true;
+  const el = document.getElementById("mod-name-entry");
+  el.style.display = "flex";
+  setTimeout(() => document.getElementById("pre-name-input").focus(), 50);
+}
+
+function closeNameEntry() {
+  document.getElementById("mod-name-entry").style.display = "none";
+}
+
+function checkPreName() {
+  const val = document.getElementById("pre-name-input").value.trim();
+  document.getElementById("start-quiz-btn").disabled = val.length < 2;
+}
+
+function startQuizWithName() {
+  const nameVal = document.getElementById("pre-name-input").value.trim();
+  if (nameVal.length < 2) return;
+  participantName = nameVal;
+  closeNameEntry();
+  // Select random questions
+  activeQuestions = shuffle(questionPool).slice(0, QUIZ_SIZE);
+  answered = new Array(QUIZ_SIZE).fill(null);
+  buildQuiz();
+  // Mark mod5 done and go to quiz
+  done[5] = true;
+  markDone(5);
+  updateProgress();
+  goto(6);
+}
+
+// ─── BUILD QUIZ ───────────────────────────────────────────────────────────────
 function buildQuiz() {
   const body = document.getElementById("quiz-body");
   body.innerHTML = "";
 
-  // Name field
-  const nameDiv = document.createElement("div");
-  nameDiv.style.cssText = "margin-bottom:24px;padding:16px;background:#f4f6fa;border-radius:10px;";
-  nameDiv.innerHTML = `
-    <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;">
-      📝 Ihr Name (für das Zertifikat):
-    </label>
-    <input id="participant-name" type="text" placeholder="Vorname Nachname"
-      style="width:100%;padding:10px 14px;border:2px solid #dde3ee;border-radius:7px;font-family:inherit;font-size:13px;"
-      oninput="checkReady()">
-  `;
-  body.appendChild(nameDiv);
+  // Name display banner
+  const banner = document.createElement("div");
+  banner.style.cssText = "margin-bottom:20px;padding:12px 16px;background:#f0f7ff;border-radius:10px;border-left:4px solid #2e5d9e;display:flex;align-items:center;gap:10px;";
+  banner.innerHTML = `<span style="font-size:20px;">👤</span><div><div style="font-size:11px;color:#6b7a99;font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Teilnehmer/in</div><div style="font-size:14px;font-weight:600;color:#1a2b4a;">${participantName}</div></div>`;
+  body.appendChild(banner);
 
-  questions.forEach((q, qi) => {
+  activeQuestions.forEach((q, qi) => {
     const div = document.createElement("div");
     div.className = "quiz-q";
     div.id = `q${qi}`;
@@ -999,21 +1285,28 @@ function buildQuiz() {
       </button>
     `).join("");
     div.innerHTML = `
-      <div class="q-num">Frage ${qi+1} / ${questions.length}</div>
+      <div class="q-num">Frage ${qi+1} / ${QUIZ_SIZE}</div>
       <div class="q-text">${q.q}</div>
       ${opts}
       <div class="feedback-msg" id="fb${qi}"></div>
     `;
     body.appendChild(div);
   });
+
+  // Update header count
+  const hdr = document.querySelector("#mod6 .module-header h2");
+  if (hdr) hdr.textContent = `Wissensüberprüfung – ${QUIZ_SIZE} Fragen`;
+  const sub = document.querySelector("#mod6 .module-header p");
+  if (sub) sub.textContent = `Mindestens ${PASS_COUNT} von ${QUIZ_SIZE} richtige Antworten für ein Zertifikat. Jede Frage nur einmal beantworten.`;
+
+  document.getElementById("submit-btn").disabled = true;
 }
 
 function selectAnswer(qi, oi) {
   if (answered[qi] !== null) return;
   answered[qi] = oi;
-  const q = questions[qi];
+  const q = activeQuestions[qi];
 
-  // Style all options
   for (let i = 0; i < q.opts.length; i++) {
     const btn = document.getElementById(`q${qi}o${i}`);
     btn.disabled = true;
@@ -1029,27 +1322,20 @@ function selectAnswer(qi, oi) {
     fb.textContent = "❌ Leider falsch. " + q.explain;
     fb.className = "feedback-msg bad";
   }
-  checkReady();
-}
 
-function checkReady() {
-  const nameVal = document.getElementById("participant-name")?.value.trim() || "";
-  const allAnswered = answered.every(a => a !== null);
-  document.getElementById("submit-btn").disabled = !(allAnswered && nameVal.length > 2);
+  if (answered.every(a => a !== null)) {
+    document.getElementById("submit-btn").disabled = false;
+  }
 }
 
 // ─── SUBMIT QUIZ ─────────────────────────────────────────────────────────────
 function submitQuiz() {
-  const nameInput = document.getElementById("participant-name").value.trim();
-  participantName = nameInput || "Mitarbeiter/in";
-
   let correct = 0;
-  questions.forEach((q, qi) => { if (answered[qi] === q.correct) correct++; });
+  activeQuestions.forEach((q, qi) => { if (answered[qi] === q.correct) correct++; });
 
-  const pct = Math.round(correct / questions.length * 100);
-  const passed = correct >= 9;
+  const pct = Math.round(correct / QUIZ_SIZE * 100);
+  const passed = correct >= PASS_COUNT;
 
-  // Show result module
   document.getElementById("mod6").classList.remove("active");
   const resultMod = document.getElementById("mod-result");
   resultMod.style.display = "block";
@@ -1057,7 +1343,7 @@ function submitQuiz() {
 
   document.getElementById("result-icon").textContent = passed ? "🏅" : "📚";
   document.getElementById("result-title").textContent = passed ? "Bestanden – Herzlichen Glückwunsch!" : "Knapp nicht bestanden – kein Problem!";
-  document.getElementById("result-sub").textContent = `${correct} von ${questions.length} Fragen richtig (${pct} %) – Mindestpunktzahl: 9/12`;
+  document.getElementById("result-sub").textContent = `${correct} von ${QUIZ_SIZE} Fragen richtig (${pct} %) – Mindestpunktzahl: ${PASS_COUNT}/${QUIZ_SIZE}`;
 
   const circle = document.getElementById("score-circle");
   circle.style.setProperty("--pct", `${pct * 3.6}deg`);
@@ -1070,7 +1356,18 @@ function submitQuiz() {
     updateProgress();
 
     const now = new Date();
-    const dateStr = now.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric"});
+    const dateStr = now.toLocaleDateString("de-DE",{day:"2-digit",month:"long",year:"numeric"});
+    const validUntil = new Date(now);
+    validUntil.setFullYear(validUntil.getFullYear() + 1);
+    const validStr = validUntil.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit",year:"numeric"});
+
+    // Populate overlay certificate
+    document.getElementById("cert-overlay-name").textContent = participantName;
+    document.getElementById("cert-overlay-date").textContent = dateStr;
+    document.getElementById("cert-overlay-score").textContent = `✓ ${correct}/${QUIZ_SIZE} Fragen richtig (${pct} %)`;
+    document.getElementById("cert-overlay-valid").textContent = validStr;
+
+    // Small inline cert-box for confirmation
     const certBox = document.getElementById("cert-box");
     certBox.style.display = "block";
     document.getElementById("cert-text").innerHTML = `
@@ -1079,23 +1376,28 @@ function submitQuiz() {
       die Pflichtunterweisung <em>Arbeitssicherheit – Bürogebäude Kaminvertriebshaus</em><br>
       gemäß <strong>ArbSchG §12 | ASiG §11 | DGUV V1 §4</strong><br>
       am <strong>${dateStr}</strong> erfolgreich abgeschlossen hat.<br><br>
-      Ergebnis: <strong>${correct}/${questions.length} Fragen richtig (${pct}%)</strong>
+      Ergebnis: <strong>${correct}/${QUIZ_SIZE} Fragen richtig (${pct}%)</strong>
     `;
     document.getElementById("print-btn").style.display = "inline-block";
   }
 }
 
-function retryQuiz() {
-  answered = new Array(questions.length).fill(null);
-  document.getElementById("mod-result").classList.remove("active");
-  document.getElementById("mod-result").style.display = "none";
-  buildQuiz();
-  document.getElementById("mod6").classList.add("active");
-  document.getElementById("submit-btn").disabled = true;
-  updateSidebar(6);
+// ─── CERTIFICATE OVERLAY ──────────────────────────────────────────────────────
+function showCertOverlay() {
+  document.getElementById("cert-printable").classList.add("show");
+}
+function closeCertOverlay() {
+  document.getElementById("cert-printable").classList.remove("show");
 }
 
-function printCert() { window.print(); }
+function retryQuiz() {
+  answered = new Array(QUIZ_SIZE).fill(null);
+  document.getElementById("mod-result").classList.remove("active");
+  document.getElementById("mod-result").style.display = "none";
+  document.getElementById("mod6").classList.add("active");
+  updateSidebar(6);
+  openNameEntry();
+}
 
 // ─── NAVIGATION ──────────────────────────────────────────────────────────────
 function goto(idx) {
@@ -1112,7 +1414,10 @@ function nextModule(idx) {
   updateProgress();
   const next = idx + 1;
   if (next === 6) {
-    buildQuiz();
+    // Don't jump to quiz yet – open name entry first
+    goto(6); // show quiz shell
+    openNameEntry();
+    return;
   }
   goto(next);
 }
